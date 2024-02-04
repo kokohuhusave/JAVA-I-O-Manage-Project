@@ -20,6 +20,9 @@ public class Book {
 		
 		this.Day = Day;
 	}
+	public Book(String title) {
+		this.title = title;
+	}
 	
 	public UUID getId() {
 		return this.id;
@@ -57,18 +60,45 @@ public class Book {
 	public String toString() {
 		return "Book[" + " id= " + id + " title = " + title + " Autor = " + Autor + " Day = " + Day + " ]";
 	}
+	
+    @Override
+    public boolean equals(Object bookElement) {
+        if (this == bookElement) { 
+        	return true;
+        }
+        if (bookElement == null || getClass() != bookElement.getClass()) {
+        	return false;
+        }
+        Book book = (Book) bookElement;
+        return Objects.equals(title, book.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title);
+    }
 }
 
 
 class BookManager{
-	private Map<UUID, Book> books = new HashMap<>(); //헤시 맵을 통한 
+	private Set<Book> books = new HashSet<>(); //set을 이용
 	
-	public void ADDBook(Book book) { // 책에 대한 신규레코드 추가 함수
-		books.put(book.getId(), book);
+	public boolean ADDBook(Book book) {
+		for(Book existingBook : books) {
+			if(existingBook.getTitle().equals(book.getTitle())) {
+				System.out.println("이미 동일한 제목에 서적이 등록 되어있습니다");
+				return false;
+				
+			}
+		}
+		books.add(book);
+		System.out.println("신규 서적이 등록 되었습니다");
+		return true;
+		
 	}
 	
 	public Book GETBook(String title){	// 책에 대한 정보를 가져오는 함수
-	    for (Book book : books.values()) {
+	    for (Book book : books) {
 	        if (book.getTitle().equals(title)) {
 	            return book;
 	        }
@@ -79,46 +109,52 @@ class BookManager{
 
 	
 	public Collection<Book> GETALLBook(){	//책에 대한 전체조회
-		return books.values();
+		return new HashSet<>(books);
 	}
 	
-	public void UPDATEBook(String TARGETTitle, String newTitle, String newAuthor, String newDay) {
-	    UUID bookIdToUpdate = null;
-	    for (Map.Entry<UUID, Book> entry : books.entrySet()) {
-	        if (entry.getValue().getTitle().equals(TARGETTitle)) {
-	            bookIdToUpdate = entry.getKey();
-	            break; // 일치하는 첫 번째 책을 찾으면 반복 종료
-	        }
-	    }
-
-	    if (bookIdToUpdate != null) {
-	        Book book = books.get(bookIdToUpdate);
-	        book.setTitle(newTitle); // 새로운 제목으로 업데이트
-	        book.setAutor(newAuthor);
-	        book.setDay(newDay);
-	    }
-	    else if(bookIdToUpdate == null) {
-	    	System.out.println("해당 서적의 대한 정보는 존재 하지 않습니다");
-	    }
-	}
+	public void UPDATEBook(String targetTitle, String newTitle, String newAuthor, String newDay) {
+        Book bookToUpdate = null;
+        for (Book book : books) {
+            if (book.getTitle().equals(targetTitle)) {
+                bookToUpdate = book;
+                break;
+            }
+        }
+        if(bookToUpdate != null) {
+        	for(Book book : books) {
+        		if (!book.equals(bookToUpdate) && book.getTitle().equals(newTitle)) {
+                    System.out.println("이미 같은 제목의 책이 존재합니다.");
+                    return;
+        		}
+        	}
+        	books.remove(bookToUpdate);
+        	bookToUpdate.setTitle(newTitle);
+        	bookToUpdate.setAutor(newAuthor);
+        	bookToUpdate.setDay(newDay);
+        	books.add(bookToUpdate);
+        	System.out.println("해당 서적에 대한 정보가 수정 되었습니다");
+        }else {
+        	System.out.println("해당 서적에 대한 정보가 존재하지 않습니다");
+        }
+    
+    }
 
 	
-	public void DELETEBook(String title) {		
-	    UUID bookIdToDelete = null;
-	    for (Map.Entry<UUID, Book> entry : books.entrySet()) {
-	        if (entry.getValue().getTitle().equals(title)) {
-	            bookIdToDelete = entry.getKey();
-	            break;
-	        }
-	    }
+	public void DELETEBook(String title) {
+        Book bookToDelete = null;
+        for (Book book : books) {
+            if (book.getTitle().equals(title)) {
+                bookToDelete = book;
+                break;
+            }
+        }
 
-	    if (bookIdToDelete != null) {
-	        books.remove(bookIdToDelete); // 일치하는 책을 맵에서 삭제
-	    }
-	    else if(bookIdToDelete == null) {
-	    	System.out.println("해당 서적의 대한 정보는 존재 하지 않습니다");
-	    }
-	}
-	
+        if (bookToDelete != null) {
+            books.remove(bookToDelete);
+            System.out.println("해당 서적에 대한 정보를 삭제했습니다");
+        } else {
+            System.out.println("해당 서적에 대한 정보가 존재하지 않습니다.");
+        }
+    }
 }
 
