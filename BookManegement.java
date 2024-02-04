@@ -39,7 +39,6 @@ public class BookManegement {
 				String Day = scanner.next();
 				
 				Manager.ADDBook(new Book(Title, Autor, Day));
-				System.out.println("신규 서적이 등록 되었습니다");
 				break;
 				
 			case 4:
@@ -61,6 +60,9 @@ public class BookManegement {
 				String UPDATEDay = scanner.next();
 				
 				Manager.UPDATEBook(TARGETTitle, UPDATETitle, UPDATEAutor, UPDATEDay);
+				break;
+				
+			default:
 				break;
 			}
 		}
