@@ -18,5 +18,5 @@ public class Book {
     private String title;
     private String author;
     private String publicationDate;
-    // 기타 필요한 필드와 메서드가 있다면 추가
+    
 }
