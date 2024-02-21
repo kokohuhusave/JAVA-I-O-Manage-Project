@@ -1,7 +1,7 @@
-package com.library.Controller; // 'controller'를 소문자로
+package com.library.Controller; 
 
-import com.library.entity.Book; // 수정된 패키지
-import com.library.service.BookService; // 수정된 패키지
+import com.library.entity.Book;
+import com.library.service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
