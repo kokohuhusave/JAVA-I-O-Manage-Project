@@ -18,5 +18,5 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    // CRUD 엔드포인트 구현 (생략)
+    // CRUD 구현 PostSQL오류로 인한 미구현
 }
