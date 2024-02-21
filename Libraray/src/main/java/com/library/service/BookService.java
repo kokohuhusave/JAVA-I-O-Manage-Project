@@ -1,7 +1,7 @@
 package com.library.service;
 
-import com.library.entity.Book; // 수정된 패키지
-import com.library.repository.BookRepository; // 수정된 패키지
+import com.library.entity.Book; 
+import com.library.repository.BookRepository; 
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,5 +16,5 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    // CRUD 메서드 구현 (생략)
+    
 }
